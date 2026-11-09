@@ -1,0 +1,21 @@
+name: Build Windows app
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Package server.js into a Windows .exe
+        run: npx --yes @yao-pkg/pkg server.js --targets node20-win-x64 --output SendToLaptop.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SendToLaptop
+          path: SendToLaptop.exe
